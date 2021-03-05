@@ -5,5 +5,7 @@
 *.vs
 *.user
 *.dll
-/Fundamentals/bin/
-/Fundamentals/obj
+/Fundamentals/ConsoleToWebAPI/bin
+/Fundamentals/ConsoleToWebAPI/obj
+/BookStore/BookStore.API/BookStore.API/bin
+/BookStore/BookStore.API/BookStore.API/obj
