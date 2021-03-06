@@ -1,4 +1,5 @@
-﻿using BookStore.API.Repository;
+﻿using BookStore.API.Models;
+using BookStore.API.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -35,6 +36,20 @@ namespace BookStore.API.Controllers
                 return NotFound();
             }
             return Ok(book);
+        }
+
+        [HttpPost("")]
+        public async Task<IActionResult> AddNewBook([FromBody] BookModel bookModel)
+        {
+            var id = await _bookRepository.AddBookAsync(bookModel);
+            return CreatedAtAction(nameof(GetBookById), new { id = id, controller = "books" }, id);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateBook([FromBody] BookModel bookModel, [FromRoute] int id)
+        {
+            await _bookRepository.UpdateBookAsync(id, bookModel);
+            return Ok();
         }
     }
 }
