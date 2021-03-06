@@ -28,5 +28,17 @@ namespace BookStore.API.Repository
 
             return records;
         }
+
+        public async Task<BookModel> GetBookByIdAsync(int bookId)
+        {
+            var records = await _context.Books.Where(x => x.Id == bookId).Select(x => new BookModel()
+            {
+                Id = x.Id,
+                Title = x.Title,
+                Description = x.Description
+            }).FirstOrDefaultAsync();
+
+            return records;
+        }
     }
 }
