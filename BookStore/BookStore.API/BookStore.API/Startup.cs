@@ -30,7 +30,7 @@ namespace BookStore.API
         {
             services.AddDbContext<BookStoreContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("BookStoreDB")));
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
             services.AddTransient<IBookRepository, BookRepository>();
         }
 
