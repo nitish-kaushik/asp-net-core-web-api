@@ -40,6 +40,7 @@ namespace BookStore.API
 
             services.AddControllers().AddNewtonsoftJson();
             services.AddTransient<IBookRepository, BookRepository>();
+            services.AddTransient<IAccountRepository, AccountRepository>();
             services.AddAutoMapper(typeof(Startup));
 
             services.AddCors(option =>
