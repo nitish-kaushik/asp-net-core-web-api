@@ -1,6 +1,7 @@
 using BookStore.API.Data;
 using BookStore.API.Models;
 using BookStore.API.Repository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,9 +12,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BookStore.API
@@ -37,6 +40,26 @@ namespace BookStore.API
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<BookStoreContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddAuthentication(option =>
+            {
+                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(option =>
+                {
+                    option.SaveToken = true;
+                    option.RequireHttpsMetadata = false;
+                    option.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidAudience = Configuration["JWT:ValidAudience"],
+                        ValidIssuer = Configuration["JWT:ValidIssuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+                    };
+                });
 
             services.AddControllers().AddNewtonsoftJson();
             services.AddTransient<IBookRepository, BookRepository>();
